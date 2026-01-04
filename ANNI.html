@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Joyeux Anniversaire Sofia</title>
+
+<style>
+:root{
+  --pink1:#ff92c2;
+  --pink2:#ff63a5;
+  --bg1:#ffedf0;
+  --bg2:#ffe0f7;
+  --text:#2d1a2b;
+  --text2:#5a2e5c;
+}
+*{ box-sizing:border-box; }
+
+html, body{
+  margin:0; padding:0;
+  font-family:'Segoe UI',sans-serif;
+  min-height:100%;
+  width:100%;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* sparkles */
+.sparkle{
+  position:fixed;
+  width:4px;height:4px;
+  background:#fff;
+  border-radius:50%;
+  opacity:0;
+  animation:twinkle 2.2s infinite;
+  z-index:0;
+}
+@keyframes twinkle{
+  0%,100%{opacity:0; transform:scale(0);}
+  50%{opacity:1; transform:scale(1);}
+}
+
+#container{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 16px;
+  position:relative;
+  z-index:1;
+}
+
+.stage{
+  width:min(900px, 100%);
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
+
+/* bouton principal */
+button.main{
+  padding:20px 50px;
+  font-size:1.2em;
+  letter-spacing:2px;
+  border:none;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--pink1),var(--pink2));
+  color:#fff;
+  cursor:pointer;
+  transition:transform .25s, box-shadow .25s;
+  z-index:5;
+  box-shadow:0 10px 30px rgba(255,99,165,.25);
+}
+button.main:hover{
+  transform:scale(1.05);
+  box-shadow:0 14px 34px rgba(255,99,165,.35);
+}
+
+/* PAGE 2 */
+#page2{
+  display:none;
+  width:100%;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+}
+
+#countdown{
+  font-size:clamp(3.2rem, 8vw, 6rem);
+  font-weight:650;
+  letter-spacing:0.35em;
+  margin:22px 0 10px;
+  color:var(--pink2);
+}
+
+/* card */
+#content{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  text-align:center;
+  padding:26px 18px;
+  width:min(680px, 100%);
+  border-radius:18px;
+  background:rgba(255,255,255,.35);
+  backdrop-filter: blur(8px);
+  box-shadow:0 12px 40px rgba(255,99,165,.18);
+  position:relative;
+  z-index:3;
+}
+
+/* center circular image */
+#sofiaPic{
+  width:190px;height:190px;
+  object-fit:cover;
+  border-radius:50%;
+  border:4px solid var(--pink1);
+  box-shadow:0 8px 26px rgba(255,99,165,0.35);
+  margin-bottom:6px;
+
+  opacity:0;
+  transform:scale(.85);
+  transition:.8s;
+}
+
+h1{
+  font-size:clamp(1.8rem, 4.2vw, 2.8rem);
+  font-weight:450;
+  letter-spacing:2px;
+  margin:0;
+
+  opacity:0;
+  transform:translateY(8px) scale(.98);
+  transition:.8s;
+}
+
+p{
+  max-width:600px;
+  font-size:clamp(1.05rem, 2.6vw, 1.2rem);
+  line-height:1.7;
+  color:var(--text2);
+  margin:8px 0 0;
+
+  opacity:0;
+  transform:translateY(10px) scale(.98);
+  transition:.8s;
+}
+
+.signature{
+  font-size:1.5rem;
+  letter-spacing:4px;
+  color:var(--pink1);
+  font-style:italic;
+  margin-top:6px;
+
+  opacity:0;
+  transform:translateY(8px) scale(.98);
+  transition:.8s;
+}
+
+#audioBtn{
+  padding:12px 20px;
+  border:none;
+  border-radius:999px;
+  background:var(--pink2);
+  color:#fff;
+  font-size:0.92em;
+  letter-spacing:1px;
+  cursor:pointer;
+  box-shadow:0 10px 24px rgba(255,99,165,0.35);
+
+  display:inline-block;
+  opacity:0;
+  transform:scale(.9);
+  transition:.6s;
+}
+#audioBtn.show{ opacity:1; transform:scale(1); }
+
+/* 4 photos côtés */
+.sideWrap{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:min(680px, 100%);
+  height:0;
+  pointer-events:none;
+  z-index:2;
+  opacity:0;
+  transition:opacity .4s;
+}
+.sideWrap.show{ opacity:1; }
+
+.sidePic{
+  width:clamp(120px, 16vw, 210px);
+  height:clamp(120px, 16vw, 210px);
+  object-fit:cover;
+  border-radius:16px;
+  border:3px solid var(--pink1);
+  box-shadow:0 10px 26px rgba(255,99,165,0.28);
+  position:absolute;
+  top:0;
+  opacity:0;
+  transition:.9s;
+  transform:translateY(-50%) scale(.9);
+}
+
+.sidePicTop{ margin-top:-140px; }
+.sidePicBot{ margin-top: 140px; }
+
+#leftTop, #leftBot{
+  left:0;
+  transform:translate(-150%, -50%) scale(.9);
+}
+#rightTop, #rightBot{
+  right:0;
+  transform:translate(150%, -50%) scale(.9);
+}
+
+.sidePic.in{ opacity:1; }
+
+#leftTop.in, #leftBot.in{ transform:translate(-112%, -50%) scale(1); }
+#rightTop.in, #rightBot.in{ transform:translate(112%, -50%) scale(1); }
+
+/* ✅ ZOOM (pulse) complet des photos latérales */
+#leftTop.in, #leftBot.in, #rightTop.in, #rightBot.in{
+  animation: sideZoom 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes sideZoom{
+  from{ transform:translate(var(--tx), -50%) scale(1); }
+  to{   transform:translate(var(--tx), -50%) scale(1.12); }
+}
+
+#leftTop.in, #leftBot.in{ --tx:-112%; }
+#rightTop.in, #rightBot.in{ --tx:112%; }
+
+@media (max-width: 1100px){
+  #leftTop.in, #leftBot.in{ --tx:-85%; transform:translate(-85%, -50%) scale(1); }
+  #rightTop.in, #rightBot.in{ --tx:85%; transform:translate(85%, -50%) scale(1); }
+}
+
+/* mobile: sous le cadre 2×2 */
+@media (max-width: 820px){
+  .sideWrap{
+    position:static;
+    transform:none;
+    width:100%;
+    height:auto;
+    margin-top:14px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+    justify-items:center;
+    pointer-events:none;
+    opacity:1;
+  }
+  .sideWrap.show{ opacity:1; }
+  .sidePic{
+    position:static;
+    opacity:1 !important;
+    transform:none !important;
+    width:160px;
+    height:160px;
+    margin-top:0 !important;
+    animation:none !important; 
+  }
+}
+
+/* fireworks */
+.firework{
+  position:fixed;
+  width:6px;height:6px;
+  background:var(--pink1);
+  border-radius:50%;
+  animation:explode 1.15s ease-out forwards;
+  z-index:6;
+  will-change: transform, opacity;
+}
+@keyframes explode{
+  to{ transform:translate(var(--x),var(--y)); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+  <div class="stage">
+
+    <!-- PAGE 2 -->
+    <div id="page2">
+      <div id="countdown">3</div>
+
+      <div id="content">
+        <!-- bouquet de fleurs au début -->
+        <div style="font-size:2rem; margin-bottom:10px;">🌸💐🌺🌷🌻</div>
+
+        <img src="center.jpg" alt="Sofia" id="sofiaPic">
+        <h1>Joyeux Anniversaire Sofia</h1>
+
+        <p>
+            Bon anniversaire hbbti ! 😄💖  
+            J’espère que cette année te trouvera en pleine santé, heureuse et entourée de tout ce que tu aimes.
+            Que rien ne te manque et que chaque jour t’apporte joie, réussite et plein de moments incroyables.<br>
+            Tu es vraiment **super sheba**, **chikoura**, une **bombe** et tu mérites tout, absolument tout dans la vie… impossible de te comparer à qui que ce soit, tu es vraiment spéciale et unique! <br>
+            Reste toujours toi-même, brillante, drôle et exceptionnelle. 💕✨
+        </p>
+
+        <button id="audioBtn" type="button" onclick="playVoice()">Appuyez pour écouter le message</button>
+        <div class="signature">— Mehdi</div>
+      </div>
+
+      <!-- 4 photos sur les côtés -->
+      <div class="sideWrap" id="sideWrap" aria-hidden="true">
+        <img src="we9fa.JPG" id="leftTop" class="sidePic sidePicTop" alt="">
+        <img src="a.JPG"     id="leftBot" class="sidePic sidePicBot" alt="">
+        <img src="IMG_E3619.JPG"  id="rightTop" class="sidePic sidePicTop" alt="">
+        <img src="right2.JPG" id="rightBot" class="sidePic sidePicBot" alt="">
+      </div>
+    </div>
+
+    <!-- bouton principal -->
+    <button class="main" type="button" onclick="start()">DÉCOUVRIR LA SURPRISE !!</button>
+
+  </div>
+</div>
+
+<script>
+// sparkles
+for(let i=0;i<55;i++){
+  const s = document.createElement("div");
+  s.className="sparkle";
+  s.style.top = Math.random()*100 + "vh";
+  s.style.left = Math.random()*100 + "vw";
+  s.style.animationDelay = (Math.random()*2.2) + "s";
+  document.body.appendChild(s);
+}
+
+let fireworksTimer = null;
+
+function start(){
+  document.querySelector('button.main').style.display="none";
+  const page2 = document.getElementById("page2");
+  page2.style.display="flex";
+
+  let c = 3;
+  const cd = document.getElementById("countdown");
+
+  const content = document.getElementById("content");
+  const audioBtn = document.getElementById("audioBtn");
+  const pic = document.getElementById("sofiaPic");
+  const title = content.querySelector("h1");
+  const text = content.querySelector("p");
+  const signature = content.querySelector(".signature");
+
+  const leftTop = document.getElementById("leftTop");
+  const leftBot = document.getElementById("leftBot");
+  const rightTop = document.getElementById("rightTop");
+  const rightBot = document.getElementById("rightBot");
+
+  const sideWrap = document.getElementById("sideWrap");
+
+  cd.textContent = c;
+
+  const timer = setInterval(()=>{
+    c--;
+    cd.textContent = c;
+
+    if(c <= 0){
+      clearInterval(timer);
+
+      setTimeout(()=>{
+        cd.style.display="none";
+        content.style.display="flex";
+
+        // reveal center + text
+        setTimeout(()=>{ pic.style.opacity=1; pic.style.transform="scale(1)"; }, 120);
+        setTimeout(()=>{ title.style.opacity=1; title.style.transform="translateY(0) scale(1)"; }, 320);
+        setTimeout(()=>{ text.style.opacity=1; text.style.transform="translateY(0) scale(1)"; }, 520);
+        setTimeout(()=>{ audioBtn.classList.add("show"); }, 980);
+        setTimeout(()=>{ signature.style.opacity=1; signature.style.transform="translateY(0) scale(1)"; }, 1120);
+
+        // show side pics container then animate pics
+        setTimeout(()=>{
+          sideWrap.classList.add("show");
+          leftTop.classList.add("in");
+          leftBot.classList.add("in");
+          rightTop.classList.add("in");
+          rightBot.classList.add("in");
+        }, 420);
+
+        // fireworks
+        if(!fireworksTimer){
+          fireworksTimer = setInterval(()=>burst(), 2300);
+          burst();
+        }
+      }, 250);
+    }
+  }, 1000);
+}
+
+function burst(){
+  const originX = Math.random() * innerWidth;
+  const originY = Math.random() * (innerHeight * 0.75) + innerHeight*0.05;
+
+  for(let i=0;i<20;i++){
+    const f = document.createElement("div");
+    f.className="firework";
+    f.style.left = originX + "px";
+    f.style.top  = originY + "px";
+    f.style.setProperty("--x",(Math.random()*340-170)+"px");
+    f.style.setProperty("--y",(Math.random()*340-170)+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(), 1200);
+  }
+}
+
+function playVoice(){
+  const msg = new SpeechSynthesisUtterance("Ya khooooo n'oublie pas que nous sommes des math techniques tressiti redjala");
+  msg.lang = "fr-FR";
+  msg.rate = 0.92;
+  msg.pitch = 1.08;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(msg);
+}
+</script>
+
+</body>
+</html>
